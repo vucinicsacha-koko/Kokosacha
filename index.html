@@ -52,15 +52,7 @@
         // ===================================================================================
         // 🎵 COMMENT AJOUTER TES MUSIQUES FACILEMENT :
         // ===================================================================================
-        // Pour chaque musique, remplis ces informations entre les accolades { } :
-        // - title : Le nom de la musique (entre guillemets)
-        // - artist : Le nom de l'artiste (entre guillemets)
-        // - src : Le chemin de ton fichier audio (ex: "music/ta-chanson.mp3" ou un lien web)
-        // - cover : Le lien de l'image de l'artiste/album (tu peux mettre un lien d'image web)
-        // ===================================================================================
         const playlistData = [
-
-
             {
                 title: "Demons",
                 artist: "Imagine Dragons",
@@ -132,8 +124,7 @@
                 artist: "Flo Rida",
                 src: "music/whistle.mp3",
                 cover: "images/Whistle.jpg"
-            },
-            
+            }
         ];
 
         // --- Logique du lecteur ---
@@ -157,7 +148,6 @@
         let isShuffle = false;
         let isRepeat = false;
 
-        // Génération automatique de la liste HTML
         function initPlaylist() {
             playlistElement.innerHTML = '';
             playlistData.forEach((track, index) => {
@@ -191,14 +181,12 @@
             btnPlayPause.textContent = "⏸";
         }
 
-        // Formater les secondes en format MM:SS
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         }
 
-        // Mise à jour de la barre de progression pendant la lecture
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 const progressPercent = (audio.currentTime / audio.duration) * 100;
@@ -208,13 +196,11 @@
             }
         });
 
-        // Permettre de cliquer sur la barre pour avancer/reculer dans la musique
         progressBar.addEventListener('input', () => {
             const seekTime = (progressBar.value / 100) * audio.duration;
             audio.currentTime = seekTime;
         });
 
-        // Play / Pause
         btnPlayPause.addEventListener('click', () => {
             if (audio.paused) {
                 if (!audio.src && playlistData.length > 0) {
@@ -229,7 +215,6 @@
             }
         });
 
-        // Bouton Suivant
         btnNext.addEventListener('click', () => {
             if (isShuffle) {
                 currentIndex = Math.floor(Math.random() * playlistData.length);
@@ -242,7 +227,6 @@
             playTrack(currentIndex);
         });
 
-        // Bouton Précédent
         btnPrev.addEventListener('click', () => {
             currentIndex--;
             if (currentIndex < 0) {
@@ -251,19 +235,16 @@
             playTrack(currentIndex);
         });
 
-        // Aléatoire
         btnShuffle.addEventListener('click', () => {
             isShuffle = !isShuffle;
             btnShuffle.classList.toggle('active-mode', isShuffle);
         });
 
-        // Répétition
         btnRepeat.addEventListener('click', () => {
             isRepeat = !isRepeat;
             btnRepeat.classList.toggle('active-mode', isRepeat);
         });
 
-        // Fin de la musique -> suite automatique
         audio.addEventListener('ended', () => {
             if (isRepeat) {
                 audio.play();
@@ -281,7 +262,6 @@
             }
         });
 
-        // Initialisation au chargement
         initPlaylist();
         if(playlistData.length > 0) {
             const first = playlistData[0];
@@ -297,9 +277,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
