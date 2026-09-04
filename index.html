@@ -1,121 +1,305 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Lecteur Musical Perso</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: rgb(255, 255, 255);
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-            margin: 0;
-        }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background: #1e1e1e;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-        }
-        h1 {
-            font-size: 20px;
-            margin-bottom: 5px;
-            color: #aa1a1a;
-            text-align: center;
-        }
-        p {
-            text-align: center;
-            color: #b3b3b3;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        audio {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        .playlist {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .playlist li {
-            padding: 12px;
-            background: #282828;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: 14px;
-        }
-        .playlist li:hover {
-            background: #383838;
-        }
-        .playlist li.active {
-            background: #ad2222;
-            color: black;
-            font-weight: bold;
-        }
-    </style>
+    <!-- Lien vers le fichier CSS externe -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
         <h1>Ma Playlist</h1>
-        <p>Fait par moi</p>
+        <p class="subtitle">Fait par moi</p>
 
-        <!-- Lecteur Audio Principal -->
-        <audio id="audio-player" controls></audio>
+        <!-- Pochette et Infos de la musique -->
+        <div class="player-info">
+            <div class="cover-container">
+                <img id="track-cover" src="" alt="Pochette">
+            </div>
+            <h2 id="track-title" class="track-title">Sélectionnez un titre</h2>
+            <p id="track-artist" class="track-artist">-</p>
+        </div>
 
-        <!-- Liste des musiques -->
-        <ul class="playlist" id="playlist">
-            <!-- Tu pourras ajouter tes musiques ici -->
-            <li data-src="music/whistle.mp3">Flo Rida - Whistle</li>
-            <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Morceau 1 - Démo SoundHelix</li>
-            <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Morceau 2 - Démo SoundHelix</li>
-        </ul>
+        <!-- Barre de progression de la musique -->
+        <div class="progress-container">
+            <span id="current-time">0:00</span>
+            <input type="range" id="progress-bar" value="0" min="0" max="100">
+            <span id="total-duration">0:00</span>
+        </div>
+
+        <!-- Boutons de contrôle style Spotify -->
+        <div class="controls">
+            <button id="btn-shuffle" class="btn-ctrl" title="Mode Aléatoire">🔀</button>
+            <button id="btn-prev" class="btn-ctrl" title="Précédent">⏮</button>
+            <button id="btn-play-pause" class="btn-ctrl btn-play" title="Play/Pause">▶</button>
+            <button id="btn-next" class="btn-ctrl" title="Suivant">⏭</button>
+            <button id="btn-repeat" class="btn-ctrl" title="Répéter">🔁</button>
+        </div>
+
+        <!-- Élément audio caché (piloté par le JS) -->
+        <audio id="audio-player"></audio>
+
+        <!-- Liste des musiques générée automatiquement -->
+        <div class="playlist-container">
+            <ul class="playlist" id="playlist"></ul>
+        </div>
     </div>
 
     <script>
-    const audio = document.getElementById('audio-player');
-    const playlist = document.getElementById('playlist');
-    const tracks = playlist.querySelectorAll('li');
-    let currentIndex = 0;
+        // ===================================================================================
+        // 🎵 COMMENT AJOUTER TES MUSIQUES FACILEMENT :
+        // ===================================================================================
+        // Pour chaque musique, remplis ces informations entre les accolades { } :
+        // - title : Le nom de la musique (entre guillemets)
+        // - artist : Le nom de l'artiste (entre guillemets)
+        // - src : Le chemin de ton fichier audio (ex: "music/ta-chanson.mp3" ou un lien web)
+        // - cover : Le lien de l'image de l'artiste/album (tu peux mettre un lien d'image web)
+        // ===================================================================================
+        const playlistData = [
 
-    // Fonction pour jouer une piste spécifique
-    function playTrack(index) {
-        tracks.forEach(t => t.classList.remove('active'));
-        const track = tracks[index];
-        track.classList.add('active');
-        audio.src = track.getAttribute('data-src');
-        audio.play();
-    }
 
-    // Clic manuel sur un morceau de la liste
-    tracks.forEach((track, index) => {
-        track.addEventListener('click', () => {
-            currentIndex = index;
+            {
+                title: "Demons",
+                artist: "Imagine Dragons",
+                src: "music/Imagine Dragons - Demons.mp3",
+                cover: "images/Imagine Dragons - Demons.jpeg"
+            },
+            {
+                title: "Nuevayol",
+                artist: "Bad Bunny",
+                src: "music/NUEVAYoL.mp3",
+                cover: "images/nuevayol bad bunny.jpeg"
+            },
+            {
+                title: "Beautiful Things",
+                artist: "Benson Boone",
+                src: "music/Beautiful Things.mp3",
+                cover: "images/benson boone.jpeg"
+            },
+            {
+                title: "GATA ONLY",
+                artist: "FloyyMenor",
+                src: "music/GATA ONLY.mp3",
+                cover: "images/GATA ONLY.jpeg"
+            },
+            {
+                title: "Don't tell your dreams",
+                artist: "LOVIXX, STOSLIV",
+                src: "music/dreams.mp3",
+                cover: "images/dreams.jpeg"
+            },
+            {
+                title: "Party Rock Anthem",
+                artist: "LMFAO",
+                src: "music/party rock anthem.mp3",
+                cover: "images/party rock anthem.jpeg"
+            },
+            {
+                title: "MON BÉBÉ",
+                artist: "RnBoi",
+                src: "music/RnBoi - MON BÉBÉ.mp3",
+                cover: "images/RnBoi - MON BÉBÉ.jpeg"
+            },
+            {
+                title: "Y que fue",
+                artist: "Don Miguelo",
+                src: "music/Don Miguelo - Y Que Fue_.mp3",
+                cover: "images/y que fue don miguelo.jpeg"
+            },
+            {
+                title: "Highest in the room",
+                artist: "Travis Scott",
+                src: "music/HIGHEST IN THE ROOM.mp3",
+                cover: "images/Travis Scott.jpg"
+            },
+            {
+                title: "Moves Like Jagger",
+                artist: "Maroon 5",
+                src: "music/Moves Like Jagger.mp3",
+                cover: "images/Maroon 5 image.jpg"
+            },
+            {
+                title: "Riptide",
+                artist: "Vance Joy",
+                src: "music/Riptide.mp3",
+                cover: "images/riptide image.jpg"
+            },
+            {
+                title: "Whistle",
+                artist: "Flo Rida",
+                src: "music/whistle.mp3",
+                cover: "images/Whistle.jpg"
+            },
+            
+        ];
+
+        // --- Logique du lecteur ---
+        const audio = document.getElementById('audio-player');
+        const playlistElement = document.getElementById('playlist');
+        const titleEl = document.getElementById('track-title');
+        const artistEl = document.getElementById('track-artist');
+        const coverEl = document.getElementById('track-cover');
+        
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnShuffle = document.getElementById('btn-shuffle');
+        const btnRepeat = document.getElementById('btn-repeat');
+
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+
+        let currentIndex = 0;
+        let isShuffle = false;
+        let isRepeat = false;
+
+        // Génération automatique de la liste HTML
+        function initPlaylist() {
+            playlistElement.innerHTML = '';
+            playlistData.forEach((track, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${track.artist} - ${track.title}`;
+                li.addEventListener('click', () => {
+                    currentIndex = index;
+                    playTrack(currentIndex);
+                });
+                playlistElement.appendChild(li);
+            });
+        }
+
+        function playTrack(index) {
+            const track = playlistData[index];
+            audio.src = track.src;
+            titleEl.textContent = track.title;
+            artistEl.textContent = track.artist;
+            coverEl.src = track.cover;
+
+            const items = playlistElement.querySelectorAll('li');
+            items.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            audio.play();
+            btnPlayPause.textContent = "⏸";
+        }
+
+        // Formater les secondes en format MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        }
+
+        // Mise à jour de la barre de progression pendant la lecture
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progressPercent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progressPercent;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+                totalDurationEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        // Permettre de cliquer sur la barre pour avancer/reculer dans la musique
+        progressBar.addEventListener('input', () => {
+            const seekTime = (progressBar.value / 100) * audio.duration;
+            audio.currentTime = seekTime;
+        });
+
+        // Play / Pause
+        btnPlayPause.addEventListener('click', () => {
+            if (audio.paused) {
+                if (!audio.src && playlistData.length > 0) {
+                    playTrack(currentIndex);
+                } else {
+                    audio.play();
+                    btnPlayPause.textContent = "⏸";
+                }
+            } else {
+                audio.pause();
+                btnPlayPause.textContent = "▶";
+            }
+        });
+
+        // Bouton Suivant
+        btnNext.addEventListener('click', () => {
+            if (isShuffle) {
+                currentIndex = Math.floor(Math.random() * playlistData.length);
+            } else {
+                currentIndex++;
+                if (currentIndex >= playlistData.length) {
+                    currentIndex = 0;
+                }
+            }
             playTrack(currentIndex);
         });
-    });
 
-    // QUAND LA MUSIQUE SE TERMINE -> Passer à la suivante
-    audio.addEventListener('ended', () => {
-        currentIndex++;
-        // Si on arrive à la fin de la liste, on retourne au tout début (optionnel)
-        if (currentIndex >= tracks.length) {
-            currentIndex = 0;
+        // Bouton Précédent
+        btnPrev.addEventListener('click', () => {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = playlistData.length - 1;
+            }
+            playTrack(currentIndex);
+        });
+
+        // Aléatoire
+        btnShuffle.addEventListener('click', () => {
+            isShuffle = !isShuffle;
+            btnShuffle.classList.toggle('active-mode', isShuffle);
+        });
+
+        // Répétition
+        btnRepeat.addEventListener('click', () => {
+            isRepeat = !isRepeat;
+            btnRepeat.classList.toggle('active-mode', isRepeat);
+        });
+
+        // Fin de la musique -> suite automatique
+        audio.addEventListener('ended', () => {
+            if (isRepeat) {
+                audio.play();
+            } else if (isShuffle) {
+                currentIndex = Math.floor(Math.random() * playlistData.length);
+                playTrack(currentIndex);
+            } else {
+                currentIndex++;
+                if (currentIndex < playlistData.length) {
+                    playTrack(currentIndex);
+                } else {
+                    currentIndex = 0;
+                    playTrack(currentIndex);
+                }
+            }
+        });
+
+        // Initialisation au chargement
+        initPlaylist();
+        if(playlistData.length > 0) {
+            const first = playlistData[0];
+            titleEl.textContent = first.title;
+            artistEl.textContent = first.artist;
+            coverEl.src = first.cover;
+            audio.src = first.src;
+            audio.addEventListener('loadedmetadata', () => {
+                totalDurationEl.textContent = formatTime(audio.duration);
+            });
         }
-        playTrack(currentIndex);
-    });
-</script>
+    </script>
 
 </body>
 </html>
+
+
+
+
 
 
