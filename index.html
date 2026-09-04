@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Lecteur Musical Perso</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: rgb(255, 255, 255);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #aa1a1a;
+            text-align: center;
+        }
+        p {
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        audio {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .playlist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .playlist li {
+            padding: 12px;
+            background: #282828;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+        .playlist li:hover {
+            background: #383838;
+        }
+        .playlist li.active {
+            background: #ad2222;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Ma Playlist</h1>
+        <p>Fait par moi</p>
+
+        <!-- Lecteur Audio Principal -->
+        <audio id="audio-player" controls></audio>
+
+        <!-- Liste des musiques -->
+        <ul class="playlist" id="playlist">
+            <!-- Tu pourras ajouter tes musiques ici -->
+            <li data-src="music/whistle.mp3">Flo Rida - Whistle</li>
+            <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Morceau 1 - Démo SoundHelix</li>
+            <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Morceau 2 - Démo SoundHelix</li>
+        </ul>
+    </div>
+
+    <script>
+    const audio = document.getElementById('audio-player');
+    const playlist = document.getElementById('playlist');
+    const tracks = playlist.querySelectorAll('li');
+    let currentIndex = 0;
+
+    // Fonction pour jouer une piste spécifique
+    function playTrack(index) {
+        tracks.forEach(t => t.classList.remove('active'));
+        const track = tracks[index];
+        track.classList.add('active');
+        audio.src = track.getAttribute('data-src');
+        audio.play();
+    }
+
+    // Clic manuel sur un morceau de la liste
+    tracks.forEach((track, index) => {
+        track.addEventListener('click', () => {
+            currentIndex = index;
+            playTrack(currentIndex);
+        });
+    });
+
+    // QUAND LA MUSIQUE SE TERMINE -> Passer à la suivante
+    audio.addEventListener('ended', () => {
+        currentIndex++;
+        // Si on arrive à la fin de la liste, on retourne au tout début (optionnel)
+        if (currentIndex >= tracks.length) {
+            currentIndex = 0;
+        }
+        playTrack(currentIndex);
+    });
+</script>
+
+</body>
+</html>
+
+
