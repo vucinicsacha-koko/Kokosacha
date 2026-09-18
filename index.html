@@ -30,7 +30,7 @@
             <span id="total-duration">0:00</span>
         </div>
 
-        <!-- Boutons de contrôle style Spotify (Étoile favoris à la place de la répétition) -->
+        <!-- Boutons de contrôle style Spotify -->
         <div class="controls">
             <button id="btn-shuffle" class="btn-ctrl" title="Mode Aléatoire">🔀</button>
             <button id="btn-prev" class="btn-ctrl" title="Précédent">⏮</button>
@@ -39,7 +39,7 @@
             <button id="btn-favorites-filter" class="btn-ctrl" title="Afficher uniquement les favoris">⭐</button>
         </div>
 
-        <!-- Élément audio caché (piloté par le JS) -->
+        <!-- Élément audio caché -->
         <audio id="audio-player"></audio>
 
         <!-- Liste des musiques générée automatiquement -->
@@ -49,9 +49,6 @@
     </div>
 
     <script>
-        // ===================================================================================
-        // 🎵 COMMENT AJOUTER TES MUSIQUES FACILEMENT :
-        // ===================================================================================
         const playlistData = [
             {
                 title: "St-Félix",
@@ -279,7 +276,6 @@
             }
         ];
 
-        // --- Logique du lecteur ---
         const audio = document.getElementById('audio-player');
         const playlistElement = document.getElementById('playlist');
         const titleEl = document.getElementById('track-title');
@@ -296,11 +292,10 @@
         const currentTimeEl = document.getElementById('current-time');
         const totalDurationEl = document.getElementById('total-duration');
 
-        let currentGlobalIndex = 0; // Index dans le tableau complet (playlistData)
+        let currentGlobalIndex = 0;
         let isShuffle = false;
-        let onlyFavorites = false; // Mode filtre favoris activé ou non
+        let onlyFavorites = false;
 
-        // Récupérer la liste active des musiques selon si le filtre favoris est activé ou non
         function getActivePlaylist() {
             if (onlyFavorites) {
                 return playlistData.map((track, index) => ({ ...track, originalIndex: index })).filter(track => track.favorite);
@@ -325,31 +320,26 @@
             activeList.forEach((track) => {
                 const li = document.createElement('li');
                 
-                // Texte de la musique
                 const textSpan = document.createElement('span');
                 textSpan.textContent = `${track.artist} - ${track.title}`;
-                textSpan.style.flexGrow = "1";
-                textSpan.style.cursor = "pointer";
                 textSpan.addEventListener('click', () => {
                     currentGlobalIndex = track.originalIndex;
                     playTrack(currentGlobalIndex);
                 });
 
-                // Bouton étoile de favori individuel
                 const favBtn = document.createElement('button');
                 favBtn.innerHTML = track.favorite ? "⭐" : "☆";
                 favBtn.className = "fav-btn";
                 favBtn.title = "Ajouter/Retirer des favoris";
                 favBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Évite de lancer la musique en cliquant sur l'étoile
+                    e.stopPropagation();
                     playlistData[track.originalIndex].favorite = !playlistData[track.originalIndex].favorite;
-                    initPlaylist(); // Met à jour l'affichage de la liste
+                    initPlaylist();
                 });
 
                 li.appendChild(textSpan);
                 li.appendChild(favBtn);
 
-                // Marquer comme actif si c'est la musique en cours
                 if (track.originalIndex === currentGlobalIndex) {
                     li.classList.add('active');
                 }
@@ -368,7 +358,7 @@
 
             audio.play();
             btnPlayPause.textContent = "⏸";
-            initPlaylist(); // Actualise l'élément actif dans la liste
+            initPlaylist();
         }
 
         function formatTime(seconds) {
@@ -417,7 +407,7 @@
             } else {
                 let nextSubIndex = currentSubIndex + 1;
                 if (nextSubIndex >= activeList.length) {
-                    nextSubIndex = 0; // Revient au début de la liste active
+                    nextSubIndex = 0;
                 }
                 playTrack(activeList[nextSubIndex].originalIndex);
             }
@@ -440,7 +430,6 @@
             btnShuffle.classList.toggle('active-mode', isShuffle);
         });
 
-        // Bouton filtre favoris global
         btnFavoritesFilter.addEventListener('click', () => {
             onlyFavorites = !onlyFavorites;
             btnFavoritesFilter.classList.toggle('active-mode', onlyFavorites);
@@ -461,7 +450,7 @@
                 if (nextSubIndex < activeList.length) {
                     playTrack(activeList[nextSubIndex].originalIndex);
                 } else {
-                    playTrack(activeList[0].originalIndex); // Boucle sur la liste active
+                    playTrack(activeList[0].originalIndex);
                 }
             }
         });
