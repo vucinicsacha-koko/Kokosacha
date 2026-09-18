@@ -30,13 +30,13 @@
             <span id="total-duration">0:00</span>
         </div>
 
-        <!-- Boutons de contrôle style Spotify -->
+        <!-- Boutons de contrôle style Spotify (Étoile favoris à la place de la répétition) -->
         <div class="controls">
             <button id="btn-shuffle" class="btn-ctrl" title="Mode Aléatoire">🔀</button>
             <button id="btn-prev" class="btn-ctrl" title="Précédent">⏮</button>
             <button id="btn-play-pause" class="btn-ctrl btn-play" title="Play/Pause">▶</button>
             <button id="btn-next" class="btn-ctrl" title="Suivant">⏭</button>
-            <button id="btn-repeat" class="btn-ctrl" title="Répéter">🔁</button>
+            <button id="btn-favorites-filter" class="btn-ctrl" title="Afficher uniquement les favoris">⭐</button>
         </div>
 
         <!-- Élément audio caché (piloté par le JS) -->
@@ -53,180 +53,229 @@
         // 🎵 COMMENT AJOUTER TES MUSIQUES FACILEMENT :
         // ===================================================================================
         const playlistData = [
-
+            {
+                title: "St-Félix",
+                artist: "Arpin lépine",
+                src: "music/St-Félix.mp3",
+                cover: "images/st-félix arpin lépine.jpeg",
+                favorite: false
+            },
+            {
+                title: "Be My Lover",
+                artist: "Melanie Thornton (remix)",
+                src: "music/Be My Lover (Club Mix).mp3",
+                cover: "images/by my lover club mix.jpeg",
+                favorite: false
+            },
+            {
+                title: "Olha a Explosão",
+                artist: "MC Kevinho",
+                src: "music/MC Kevinho - Olha a Explosão (Audio HQ).mp3",
+                cover: "images/MC Kevinho.jpeg",
+                favorite: false
+            },
             {
                 title: "Locked Away",
                 artist: "R. City - ft. Adam Levine",
                 src: "music/R. City - Locked Away ft. Adam Levine.mp3",
-                cover: "images/R. City - Locked Away ft. Adam Levine.jpeg"
+                cover: "images/R. City - Locked Away ft. Adam Levine.jpeg",
+                favorite: false
             },
             {
                 title: "Fear",
                 artist: "NF",
                 src: "music/NF - Fear.mp3",
-                cover: "images/NF - Fear.jpeg"
+                cover: "images/NF - Fear.jpeg",
+                favorite: false
             },
             {
                 title: "Neon Teeth",
                 artist: "Broken Loyalty",
                 src: "music/Neon Teeth & Broken Loyalty.mp3",
-                cover: "images/Neon Teeth & Broken Loyalty.jpeg"
+                cover: "images/Neon Teeth & Broken Loyalty.jpeg",
+                favorite: false
             },
             {
                 title: "Monica Bellucci 2",
                 artist: "IRIAS, LOVIXX",
                 src: "music/IRIAS, LOVIXX - Monica Bellucci 2.mp3",
-                cover: "images/IRIAS, LOVIXX - Monica Bellucci 2.jpeg"
+                cover: "images/IRIAS, LOVIXX - Monica Bellucci 2.jpeg",
+                favorite: false
             },
             {
                 title: "CHOPPER",
                 artist: "GAWNE",
                 src: "music/GAWNE - CHOPPER.mp3",
-                cover: "images/GAWNE - CHOPPER.jpeg"
+                cover: "images/GAWNE - CHOPPER.jpeg",
+                favorite: false
             },
             {
                 title: "PETETE",
                 artist: "Gambi",
                 src: "music/Gambi - PETETE.mp3",
-                cover: "images/Gambi - PETETE.jpeg"
+                cover: "images/Gambi - PETETE.jpeg",
+                favorite: false
             },
             {
                 title: "My House",
                 artist: "Flo Rida",
                 src: "music/Flo Rida - My House.mp3",
-                cover: "images/Flo Rida - My House.jpeg"
+                cover: "images/Flo Rida - My House.jpeg",
+                favorite: false
             },
             {
                 title: "The Monster",
                 artist: "Eminem",
                 src: "music/Eminem - The Monster.mp3",
-                cover: "images/Eminem - The Monster.jpeg"
+                cover: "images/Eminem - The Monster.jpeg",
+                favorite: false
             },
             {
                 title: "Paranoid",
                 artist: "Augxst",
                 src: "music/Augxst - Paranoid.mp3",
-                cover: "images/Augxst - Paranoid.jpeg"
+                cover: "images/Augxst - Paranoid.jpeg",
+                favorite: false
             },
             {
                 title: "All Of The Lights",
                 artist: "Kanye West",
                 src: "music/All Of The Lights.mp3",
-                cover: "images/All Of The Lights.jpeg"
+                cover: "images/All Of The Lights.jpeg",
+                favorite: false
             },
             {
                 title: "Locked Out Of Heaven",
                 artist: "Bruno Mars",
                 src: "music/Bruno Mars - Locked Out Of Heaven.mp3",
-                cover: "images/Bruno Mars - Locked Out Of Heaven.jpeg"
+                cover: "images/Bruno Mars - Locked Out Of Heaven.jpeg",
+                favorite: false
             },
             {
                 title: "4K",
                 artist: "El Alfa",
                 src: "music/4K.mp3",
-                cover: "images/4K.jpeg"
+                cover: "images/4K.jpeg",
+                favorite: false
             },
             {
                 title: "Him & I",
                 artist: "G-Eazy & Halsey ",
                 src: "music/Him & I.mp3",
-                cover: "images/Him & I.jpeg"
+                cover: "images/Him & I.jpeg",
+                favorite: false
             },
             {
                 title: "Maps",
                 artist: "Maroon 5",
                 src: "music/Maps.mp3",
-                cover: "images/maps maroon 5.jpeg"
+                cover: "images/maps maroon 5.jpeg",
+                favorite: false
             },
             {
                 title: "AWGAZI",
                 artist: "Palm Monkey",
                 src: "music/AWGAZI.mp3",
-                cover: "images/AWGAZI.jpeg"
+                cover: "images/AWGAZI.jpeg",
+                favorite: false
             },
             {
                 title: "Closer",
                 artist: "The Chainsmokers",
                 src: "music/Closer.mp3",
-                cover: "images/Closer.jpeg"
+                cover: "images/Closer.jpeg",
+                favorite: false
             },
             {
                 title: "Something Just Like This",
                 artist: "The Chainsmokers & Coldplay",
                 src: "music/Something Just Like This.mp3",
-                cover: "images/something just like this.jpeg"
+                cover: "images/something just like this.jpeg",
+                favorite: false
             },
             {
                 title: "Demons",
                 artist: "Imagine Dragons",
                 src: "music/Imagine Dragons - Demons.mp3",
-                cover: "images/Imagine Dragons - Demons.jpeg"
+                cover: "images/Imagine Dragons - Demons.jpeg",
+                favorite: false
             },
             {
                 title: "Nuevayol",
                 artist: "Bad Bunny",
                 src: "music/NUEVAYoL.mp3",
-                cover: "images/nuevayol bad bunny.jpeg"
+                cover: "images/nuevayol bad bunny.jpeg",
+                favorite: false
             },
             {
                 title: "Beautiful Things",
                 artist: "Benson Boone",
                 src: "music/Beautiful Things.mp3",
-                cover: "images/benson boone.jpeg"
+                cover: "images/benson boone.jpeg",
+                favorite: false
             },
             {
                 title: "GATA ONLY",
                 artist: "FloyyMenor",
                 src: "music/GATA ONLY.mp3",
-                cover: "images/GATA ONLY.jpeg"
+                cover: "images/GATA ONLY.jpeg",
+                favorite: false
             },
             {
                 title: "Don't tell your dreams",
                 artist: "LOVIXX, STOSLIV",
                 src: "music/dreams.mp3",
-                cover: "images/dreams.jpeg"
+                cover: "images/dreams.jpeg",
+                favorite: false
             },
             {
                 title: "Party Rock Anthem",
                 artist: "LMFAO",
                 src: "music/party rock anthem.mp3",
-                cover: "images/party rock anthem.jpeg"
+                cover: "images/party rock anthem.jpeg",
+                favorite: false
             },
             {
                 title: "MON BÉBÉ",
                 artist: "RnBoi",
                 src: "music/RnBoi - MON BÉBÉ.mp3",
-                cover: "images/RnBoi - MON BÉBÉ.jpeg"
+                cover: "images/RnBoi - MON BÉBÉ.jpeg",
+                favorite: false
             },
             {
                 title: "Y que fue",
                 artist: "Don Miguelo",
                 src: "music/Don Miguelo - Y Que Fue_.mp3",
-                cover: "images/y que fue don miguelo.jpeg"
+                cover: "images/y que fue don miguelo.jpeg",
+                favorite: false
             },
             {
                 title: "Highest in the room",
                 artist: "Travis Scott",
                 src: "music/HIGHEST IN THE ROOM.mp3",
-                cover: "images/Travis Scott.jpg"
+                cover: "images/Travis Scott.jpg",
+                favorite: false
             },
             {
                 title: "Moves Like Jagger",
                 artist: "Maroon 5",
                 src: "music/Moves Like Jagger.mp3",
-                cover: "images/Maroon 5 image.jpg"
+                cover: "images/Maroon 5 image.jpg",
+                favorite: false
             },
             {
                 title: "Riptide",
                 artist: "Vance Joy",
                 src: "music/Riptide.mp3",
-                cover: "images/riptide image.jpg"
+                cover: "images/riptide image.jpg",
+                favorite: false
             },
             {
                 title: "Whistle",
                 artist: "Flo Rida",
                 src: "music/whistle.mp3",
-                cover: "images/Whistle.jpg"
+                cover: "images/Whistle.jpg",
+                favorite: false
             }
         ];
 
@@ -241,47 +290,85 @@
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
         const btnShuffle = document.getElementById('btn-shuffle');
-        const btnRepeat = document.getElementById('btn-repeat');
+        const btnFavoritesFilter = document.getElementById('btn-favorites-filter');
 
         const progressBar = document.getElementById('progress-bar');
         const currentTimeEl = document.getElementById('current-time');
         const totalDurationEl = document.getElementById('total-duration');
 
-        let currentIndex = 0;
+        let currentGlobalIndex = 0; // Index dans le tableau complet (playlistData)
         let isShuffle = false;
-        let isRepeat = false;
+        let onlyFavorites = false; // Mode filtre favoris activé ou non
+
+        // Récupérer la liste active des musiques selon si le filtre favoris est activé ou non
+        function getActivePlaylist() {
+            if (onlyFavorites) {
+                return playlistData.map((track, index) => ({ ...track, originalIndex: index })).filter(track => track.favorite);
+            } else {
+                return playlistData.map((track, index) => ({ ...track, originalIndex: index }));
+            }
+        }
 
         function initPlaylist() {
             playlistElement.innerHTML = '';
-            playlistData.forEach((track, index) => {
+            const activeList = getActivePlaylist();
+
+            if (activeList.length === 0) {
                 const li = document.createElement('li');
-                li.textContent = `${track.artist} - ${track.title}`;
-                li.addEventListener('click', () => {
-                    currentIndex = index;
-                    playTrack(currentIndex);
+                li.textContent = "Aucune musique en favoris";
+                li.style.textAlign = "center";
+                li.style.color = "#777";
+                playlistElement.appendChild(li);
+                return;
+            }
+
+            activeList.forEach((track) => {
+                const li = document.createElement('li');
+                
+                // Texte de la musique
+                const textSpan = document.createElement('span');
+                textSpan.textContent = `${track.artist} - ${track.title}`;
+                textSpan.style.flexGrow = "1";
+                textSpan.style.cursor = "pointer";
+                textSpan.addEventListener('click', () => {
+                    currentGlobalIndex = track.originalIndex;
+                    playTrack(currentGlobalIndex);
                 });
+
+                // Bouton étoile de favori individuel
+                const favBtn = document.createElement('button');
+                favBtn.innerHTML = track.favorite ? "⭐" : "☆";
+                favBtn.className = "fav-btn";
+                favBtn.title = "Ajouter/Retirer des favoris";
+                favBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Évite de lancer la musique en cliquant sur l'étoile
+                    playlistData[track.originalIndex].favorite = !playlistData[track.originalIndex].favorite;
+                    initPlaylist(); // Met à jour l'affichage de la liste
+                });
+
+                li.appendChild(textSpan);
+                li.appendChild(favBtn);
+
+                // Marquer comme actif si c'est la musique en cours
+                if (track.originalIndex === currentGlobalIndex) {
+                    li.classList.add('active');
+                }
+
                 playlistElement.appendChild(li);
             });
         }
 
-        function playTrack(index) {
-            const track = playlistData[index];
+        function playTrack(globalIndex) {
+            currentGlobalIndex = globalIndex;
+            const track = playlistData[globalIndex];
             audio.src = track.src;
             titleEl.textContent = track.title;
             artistEl.textContent = track.artist;
             coverEl.src = track.cover;
 
-            const items = playlistElement.querySelectorAll('li');
-            items.forEach((item, i) => {
-                if (i === index) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
-                }
-            });
-
             audio.play();
             btnPlayPause.textContent = "⏸";
+            initPlaylist(); // Actualise l'élément actif dans la liste
         }
 
         function formatTime(seconds) {
@@ -307,7 +394,7 @@
         btnPlayPause.addEventListener('click', () => {
             if (audio.paused) {
                 if (!audio.src && playlistData.length > 0) {
-                    playTrack(currentIndex);
+                    playTrack(currentGlobalIndex);
                 } else {
                     audio.play();
                     btnPlayPause.textContent = "⏸";
@@ -319,23 +406,33 @@
         });
 
         btnNext.addEventListener('click', () => {
+            const activeList = getActivePlaylist();
+            if (activeList.length === 0) return;
+
+            const currentSubIndex = activeList.findIndex(t => t.originalIndex === currentGlobalIndex);
+
             if (isShuffle) {
-                currentIndex = Math.floor(Math.random() * playlistData.length);
+                const randomIndex = Math.floor(Math.random() * activeList.length);
+                playTrack(activeList[randomIndex].originalIndex);
             } else {
-                currentIndex++;
-                if (currentIndex >= playlistData.length) {
-                    currentIndex = 0;
+                let nextSubIndex = currentSubIndex + 1;
+                if (nextSubIndex >= activeList.length) {
+                    nextSubIndex = 0; // Revient au début de la liste active
                 }
+                playTrack(activeList[nextSubIndex].originalIndex);
             }
-            playTrack(currentIndex);
         });
 
         btnPrev.addEventListener('click', () => {
-            currentIndex--;
-            if (currentIndex < 0) {
-                currentIndex = playlistData.length - 1;
+            const activeList = getActivePlaylist();
+            if (activeList.length === 0) return;
+
+            const currentSubIndex = activeList.findIndex(t => t.originalIndex === currentGlobalIndex);
+            let prevSubIndex = currentSubIndex - 1;
+            if (prevSubIndex < 0) {
+                prevSubIndex = activeList.length - 1;
             }
-            playTrack(currentIndex);
+            playTrack(activeList[prevSubIndex].originalIndex);
         });
 
         btnShuffle.addEventListener('click', () => {
@@ -343,24 +440,28 @@
             btnShuffle.classList.toggle('active-mode', isShuffle);
         });
 
-        btnRepeat.addEventListener('click', () => {
-            isRepeat = !isRepeat;
-            btnRepeat.classList.toggle('active-mode', isRepeat);
+        // Bouton filtre favoris global
+        btnFavoritesFilter.addEventListener('click', () => {
+            onlyFavorites = !onlyFavorites;
+            btnFavoritesFilter.classList.toggle('active-mode', onlyFavorites);
+            initPlaylist();
         });
 
         audio.addEventListener('ended', () => {
-            if (isRepeat) {
-                audio.play();
-            } else if (isShuffle) {
-                currentIndex = Math.floor(Math.random() * playlistData.length);
-                playTrack(currentIndex);
+            const activeList = getActivePlaylist();
+            if (activeList.length === 0) return;
+
+            const currentSubIndex = activeList.findIndex(t => t.originalIndex === currentGlobalIndex);
+
+            if (isShuffle) {
+                const randomIndex = Math.floor(Math.random() * activeList.length);
+                playTrack(activeList[randomIndex].originalIndex);
             } else {
-                currentIndex++;
-                if (currentIndex < playlistData.length) {
-                    playTrack(currentIndex);
+                let nextSubIndex = currentSubIndex + 1;
+                if (nextSubIndex < activeList.length) {
+                    playTrack(activeList[nextSubIndex].originalIndex);
                 } else {
-                    currentIndex = 0;
-                    playTrack(currentIndex);
+                    playTrack(activeList[0].originalIndex); // Boucle sur la liste active
                 }
             }
         });
