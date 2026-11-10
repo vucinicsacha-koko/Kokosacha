@@ -67,7 +67,7 @@ h1 {
 .track-artist {
     color: #b3b3b3;
     font-size: 0.95rem;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .progress-container {
@@ -75,7 +75,7 @@ h1 {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-size: 0.85rem;
     color: #b3b3b3;
 }
@@ -90,7 +90,7 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .btn-ctrl {
@@ -119,9 +119,10 @@ h1 {
     font-size: 1.3rem;
 }
 
-.active-mode {
+.active-mode, .active-view-btn {
     background-color: #e50914 !important;
     border-color: #e50914 !important;
+    color: #ffffff !important;
 }
 
 .playlist-container {
@@ -160,7 +161,6 @@ h1 {
     border-left: 4px solid #e50914;
 }
 
-/* Le texte prend toute la place pour pousser l'étoile tout à droite */
 .playlist li span {
     flex-grow: 1;
     white-space: nowrap;
@@ -170,7 +170,6 @@ h1 {
     cursor: pointer;
 }
 
-/* L'étoile fixée bien à droite */
 .fav-btn {
     background: none;
     border: none;
@@ -184,4 +183,8 @@ h1 {
 
 .fav-btn:hover {
     transform: scale(1.2);
+}
+
+.playlist-item-menu:hover {
+    background-color: #333 !important;
 }
