@@ -12,6 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    box-sizing: border-box;
 }
 
 .container {
@@ -37,6 +38,25 @@ h1 {
     font-size: 0.9rem;
     margin-top: 0;
     margin-bottom: 20px;
+}
+
+/* Correction de la barre de recherche pour le mobile */
+.search-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#search-input {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #fff;
+    outline: none;
+    box-sizing: border-box; /* Empêche le champ de dépasser du cadre sur mobile */
 }
 
 .player-info {
