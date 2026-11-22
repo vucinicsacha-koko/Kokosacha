@@ -26,6 +26,12 @@
                 <input type="text" id="search-input" placeholder="🔍 Rechercher..." oninput="filterPlaylist()">
             </div>
 
+            <!-- Bandeau indiquant la playlist active (si une playlist est sélectionnée) -->
+            <div id="active-playlist-banner" style="display: none; background: #220507; border: 1px solid #e50914; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                <span id="active-playlist-label" style="color: #fff; font-weight: bold;">📁 Playlist</span>
+                <button onclick="clearActivePlaylist()" style="background: #e50914; color: #fff; border: none; border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 0.75rem;">Tout voir</button>
+            </div>
+
             <!-- Pochette et Infos de la musique -->
             <div class="player-info">
                 <div class="cover-container">
@@ -78,18 +84,6 @@
             <div id="playlists-list-container" class="playlist-container" style="max-height: 280px;"></div>
         </div>
 
-        <!-- VUE DÉTAIL D'UNE PLAYLIST -->
-        <div id="view-playlist-detail" class="view-section" style="display: none;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                <button onclick="backToPlaylistsMenu()" class="btn-ctrl" style="width: auto; padding: 5px 12px; font-size: 0.8rem; border-radius: 8px;">⬅ Retour</button>
-                <h3 id="detail-playlist-title" style="color: #e50914; margin: 0;">Nom Playlist</h3>
-                <div style="width: 50px;"></div>
-            </div>
-            <div class="playlist-container" style="max-height: 250px;">
-                <ul class="playlist" id="detail-playlist-tracks"></ul>
-            </div>
-        </div>
-
     </div>
 
     <!-- MODAL AJOUTER À UNE PLAYLIST -->
@@ -103,133 +97,153 @@
 
     <script>
         let playlistData = [
-            {
-                title: "UNETHICAL", 
-                artist: "Faouzia", 
-                src: "musics/Faouzia - UNETHICAL.mp3", 
-                cover: "imagess/Faouzia - UNETHICAL.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "Disfruto", 
-                artist: "Carla Morrison", 
-                src: "musics/Carla Morrison - Disfruto.mp3", 
-                cover: "imagess/Carla Morrison - Disfruto.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "24hrs in Shanghai", 
-                artist: "Connor Price & Kaien Nuen", 
-                src: "musics/Connor Price & Kaien Nuen - 24hrs in Shanghai.mp3", 
-                cover: "imagess/Connor Price & Kaien Nuen - 24hrs in Shanghai.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "sous influence", 
-                artist: "Eddy de Pretto", 
-                src: "musics/Eddy de Pretto - sous influence.mp3", 
-                cover: "imagess/Eddy de Pretto - sous influence.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "One More Night", 
-                artist: "Maroon 5", 
-                src: "musics/Maroon 5 - One More Night.mp3", 
-                cover: "imagess/Maroon 5 - One More Night.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "No", 
-                artist: "Meghan Trainor", 
-                src: "musics/Meghan Trainor - No.mp3", 
-                cover: "imagess/Meghan Trainor - No.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "dans l'univers", 
-                artist: "Nekfeu", 
-                src: "musics/Nekfeu - dans l'univers.mp3", 
-                cover: "imagess/Nekfeu - dans l'univers.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "Enfin Bon", 
-                artist: "TeddyBear", 
-                src: "musics/TeddyBear - Enfin Bon.mp3", 
-                cover: "imagess/TeddyBear - Enfin Bon.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "À L'AUBE", 
-                artist: "REVER", 
-                src: "musics/REVER - À L'AUBE.mp3", 
-                cover: "imagess/REVER - À L'AUBE.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "Poison", 
-                artist: "RIELL", 
-                src: "musics/RIELL - Poison.mp3", 
-                cover: "imagess/RIELL - Poison.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "Tu vuò fà l’americano", 
-                artist: "Renato Carosone", 
-                src: "musics/Tu vuò fà l’americano - Renato Carosone.mp3", 
-                cover: "imagess/Tu vuò fà l’americano - Renato Carosone.jpeg", 
-                favorite: true 
-            },
-            {
-                title: "YOU", 
-                artist: "Alessandro Capozzi", 
-                src: "musics/YOU by Alessandro Capozzi.mp3", 
-                cover: "imagess/YOU by Alessandro Capozzi.jpeg", 
-                favorite: true 
-            },
 
-
-
-            { title: "Summertime Sadness", artist: "Lana Del Rey", src: "musics/Lana Del Rey - Summertime Sadness.mp3", cover: "imagess/Lana Del Rey - Summertime Sadness.jpeg", favorite: false },
-            { title: "Me, Myself & I", artist: "G-Eazy x Bebe Rexha", src: "musics/G-Eazy x Bebe Rexha - Me, Myself & I.mp3", cover: "imagess/G-Eazy x Bebe Rexha - Me, Myself & I.jpeg", favorite: false },
-            { title: "St-Félix", artist: "Arpin lépine", src: "music/St-Félix.mp3", cover: "images/st-félix arpin lépine.jpeg", favorite: false },
-            { title: "Another Love", artist: "Tom Odell", src: "music/Tom Odell - Another Love.mp3", cover: "images/Tom Odell - Another Love.jpeg", favorite: false },
-            { title: "Someone Like You", artist: "Adele", src: "music/Adele – Someone Like You.mp3", cover: "images/Adele – Someone Like You.jpeg", favorite: false },
-            { title: "Someone You Loved", artist: "Lewis Capaldi", src: "music/Lewis Capaldi - Someone You Loved.mp3", cover: "images/Lewis Capaldi - Someone You Loved.jpeg", favorite: false },
-            { title: "What Was I Made For", artist: "Billie Eilish", src: "music/Billie Eilish - What Was I Made For.mp3", cover: "images/Billie Eilish - What Was I Made For.jpeg", favorite: false },
-            { title: "The Scientist", artist: "Coldplay", src: "music/coldplay - The Scientist.mp3", cover: "images/The Scientist.jpeg", favorite: false },
-            { title: "My Immortal", artist: "Evanescence", src: "music/My Immortal - Evanescence.mp3", cover: "images/My Immortal - Evanescence.jpeg", favorite: false },
-            { title: "Be My Lover", artist: "Melanie Thornton (remix)", src: "music/Be My Lover (Club Mix).mp3", cover: "images/by my lover club mix.jpeg", favorite: false },
-            { title: "Olha a Explosão", artist: "MC Kevinho", src: "music/MC Kevinho - Olha a Explosão (Audio HQ).mp3", cover: "images/MC Kevinho.jpeg", favorite: false },
-            { title: "Locked Away", artist: "R. City ft. Adam Levine", src: "music/R. City - Locked Away ft. Adam Levine.mp3", cover: "images/R. City - Locked Away ft. Adam Levine.jpeg", favorite: false },
-            { title: "Fear", artist: "NF", src: "music/NF - Fear.mp3", cover: "images/NF - Fear.jpeg", favorite: false },
-            { title: "Neon Teeth", artist: "Broken Loyalty", src: "music/Neon Teeth & Broken Loyalty.mp3", cover: "images/Neon Teeth & Broken Loyalty.jpeg", favorite: false },
-            { title: "Monica Bellucci 2", artist: "IRIAS, LOVIXX", src: "music/IRIAS, LOVIXX - Monica Bellucci 2.mp3", cover: "images/IRIAS, LOVIXX - Monica Bellucci 2.jpeg", favorite: false },
-            { title: "CHOPPER", artist: "GAWNE", src: "music/GAWNE - CHOPPER.mp3", cover: "images/GAWNE - CHOPPER.jpeg", favorite: false },
-            { title: "PETETE", artist: "Gambi", src: "music/Gambi - PETETE.mp3", cover: "images/Gambi - PETETE.jpeg", favorite: false },
-            { title: "My House", artist: "Flo Rida", src: "music/Flo Rida - My House.mp3", cover: "images/Flo Rida - My House.jpeg", favorite: false },
-            { title: "The Monster", artist: "Eminem", src: "music/Eminem - The Monster.mp3", cover: "images/Eminem - The Monster.jpeg", favorite: false },
-            { title: "Paranoid", artist: "Augxst", src: "music/Augxst - Paranoid.mp3", cover: "images/Augxst - Paranoid.jpeg", favorite: false },
-            { title: "All Of The Lights", artist: "Kanye West", src: "music/All Of The Lights.mp3", cover: "images/All Of The Lights.jpeg", favorite: false },
-            { title: "Locked Out Of Heaven", artist: "Bruno Mars", src: "music/Bruno Mars - Locked Out Of Heaven.mp3", cover: "images/Bruno Mars - Locked Out Of Heaven.jpeg", favorite: false },
-            { title: "4K", artist: "El Alfa", src: "music/4K.mp3", cover: "images/4K.jpeg", favorite: false },
-            { title: "Him & I", artist: "G-Eazy & Halsey", src: "music/Him & I.mp3", cover: "images/Him & I.jpeg", favorite: false },
-            { title: "Maps", artist: "Maroon 5", src: "music/Maps.mp3", cover: "images/maps maroon 5.jpeg", favorite: false },
-            { title: "AWGAZI", artist: "Palm Monkey", src: "music/AWGAZI.mp3", cover: "images/AWGAZI.jpeg", favorite: false },
-            { title: "Closer", artist: "The Chainsmokers", src: "music/Closer.mp3", cover: "images/Closer.jpeg", favorite: false },
-            { title: "Something Just Like This", artist: "The Chainsmokers & Coldplay", src: "music/Something Just Like This.mp3", cover: "images/something just like this.jpeg", favorite: false },
-            { title: "Demons", artist: "Imagine Dragons", src: "music/Imagine Dragons - Demons.mp3", cover: "images/Imagine Dragons - Demons.jpeg", favorite: false },
-            { title: "Nuevayol", artist: "Bad Bunny", src: "music/NUEVAYoL.mp3", cover: "images/nuevayol bad bunny.jpeg", favorite: false },
-            { title: "Beautiful Things", artist: "Benson Boone", src: "music/Beautiful Things.mp3", cover: "images/benson boone.jpeg", favorite: false },
-            { title: "GATA ONLY", artist: "FloyyMenor", src: "music/GATA ONLY.mp3", cover: "images/GATA ONLY.jpeg", favorite: false },
-            { title: "Don't tell your dreams", artist: "LOVIXX, STOSLIV", src: "music/dreams.mp3", cover: "images/dreams.jpeg", favorite: false },
-            { title: "Party Rock Anthem", artist: "LMFAO", src: "music/party rock anthem.mp3", cover: "images/party rock anthem.jpeg", favorite: false },
-            { title: "MON BÉBÉ", artist: "RnBoi", src: "music/RnBoi - MON BÉBÉ.mp3", cover: "images/RnBoi - MON BÉBÉ.jpeg", favorite: false },
-            { title: "Y que fue", artist: "Don Miguelo", src: "music/Don Miguelo - Y Que Fue_.mp3", cover: "images/y que fue don miguelo.jpeg", favorite: false },
-            { title: "Highest in the room", artist: "Travis Scott", src: "music/HIGHEST IN THE ROOM.mp3", cover: "images/Travis Scott.jpg", favorite: false },
-            { title: "Moves Like Jagger", artist: "Maroon 5", src: "music/Moves Like Jagger.mp3", cover: "images/Maroon 5 image.jpg", favorite: false },
-            { title: "Riptide", artist: "Vance Joy", src: "music/Riptide.mp3", cover: "images/riptide image.jpg", favorite: false },
-            { title: "Whistle", artist: "Flo Rida", src: "music/whistle.mp3", cover: "images/Whistle.jpg", favorite: false }
+            { title: "Baianá",
+             artist: "Bakermat", 
+             src: "musiques/Bakermat - Baianá.mp3", 
+             cover: "images/Bakermat - Baianá.jpeg", 
+             favorite: true },
+            { title: "Emmenez-moi",
+             artist: "Charles Aznavour", 
+             src: "musiques/Charles Aznavour - Emmenez-moi.mp3", 
+             cover: "images/Charles Aznavour - Emmenez-moi.jpeg", 
+             favorite: true },
+            { title: "Grand Bain",
+             artist: "DADJU ft. Ninho", 
+             src: "musiques/DADJU - Grand Bain ft. Ninho.mp3", 
+             cover: "images/DADJU - Grand Bain ft. Ninho.jpeg", 
+             favorite: true },
+            { title: "TU N'ES PLUS LÀ",
+             artist: "Doz", 
+             src: "musiques/Doz - TU N'ES PLUS LÀ.mp3", 
+             cover: "images/Doz - TU N'ES PLUS LÀ.jpeg", 
+             favorite: true },
+            { title: "Porcelain",
+             artist: "Faouzia", 
+             src: "musiques/Faouzia - Porcelain.mp3", 
+             cover: "images/Faouzia - Porcelain.jpeg", 
+             favorite: true },
+            { title: "Je Viens De Là",
+             artist: "Grand Corps Malade", 
+             src: "musiques/Grand Corps Malade - Je Viens De Là.mp3", 
+             cover: "images/Grand Corps Malade - Je Viens De Là.jpeg", 
+             favorite: true },
+            { title: "Dernière Danse",
+             artist: "Indila", 
+             src: "musiques/Indila - Dernière Danse.mp3", 
+             cover: "images/Indila - Dernière Danse.jpeg", 
+             favorite: true },
+            { title: "Goodbye To A Lover Again",
+             artist: "Isak Danielson", 
+             src: "musiques/Isak Danielson - Goodbye To A Lover Again.mp3", 
+             cover: "images/Isak Danielson - Goodbye To A Lover Again.jpeg", 
+             favorite: true },
+            { title: "Colors",
+             artist: "Jake Llaguno", 
+             src: "musiques/Jake Llaguno - Colors.mp3", 
+             cover: "images/Jake Llaguno - Colors.jpeg", 
+             favorite: true },
+            { title: "OXYGEN",
+             artist: "Johnny Huynh", 
+             src: "musiques/Johnny Huynh - OXYGEN.mp3", 
+             cover: "images/Johnny Huynh - OXYGEN.jpeg", 
+             favorite: true },
+            { title: "Seven Years",
+             artist: "LG Malique & Lukas Graham", 
+             src: "musiques/LG Malique & Lukas Graham - Seven Years.mp3", 
+             cover: "images/LG Malique & Lukas Graham - Seven Years.jpeg", 
+             favorite: true },
+            { title: "In The Name Of Love",
+             artist: "Martin Garrix & Bebe Rexha", 
+             src: "musiques/Martin Garrix & Bebe Rexha - In The Name Of Love.mp3", 
+             cover: "images/Martin Garrix & Bebe Rexha - In The Name Of Love.jpeg", 
+             favorite: true },
+            { title: "Dans l'univers",
+             artist: "Nekfeu", 
+             src: "musiques/Nekfeu - dans l'univers.mp3", 
+             cover: "images/Nekfeu - dans l'univers.jpeg", 
+             favorite: true },
+            { title: "L'enfant seul",
+             artist: "Oxmo Puccino", 
+             src: "musiques/Oxmo Puccino - L'enfant seul.mp3", 
+             cover: "images/Oxmo Puccino - L'enfant seul.jpeg", 
+             favorite: true },
+            { title: "Un jour je marierai un ange",
+             artist: "PIERRE DE MAERE", 
+             src: "musiques/PIERRE DE MAERE - Un jour je marierai un ange.mp3", 
+             cover: "images/PIERRE DE MAERE - Un jour je marierai un ange.jpeg", 
+             favorite: true },
+            { title: "Black and Yellow",
+             artist: "Wiz Khalifa", 
+             src: "musiques/Wiz Khalifa - Black and Yellow.mp3", 
+             cover: "images/Wiz Khalifa - Black and Yellow.jpeg", 
+             favorite: true },
+            { title: "YOU",
+             artist: "Alessandro Capozzi", 
+             src: "musiques/Alessandro Capozzi - YOU.mp3", 
+             cover: "images/Alessandro Capozzi - YOU.jpeg", 
+             favorite: true },
+            { title: "Tourner la page",
+             artist: "Zaho", 
+             src: "musiques/Zaho - Tourner la page.mp3", 
+             cover: "images/Zaho - Tourner la page.jpeg", 
+             favorite: true },
+            { title: "UNETHICAL",
+             artist: "Faouzia", 
+             src: "musique/Faouzia - UNETHICAL.mp3", 
+             cover: "image/Faouzia - UNETHICAL.jpeg", 
+             favorite: true },
+            { title: "Disfruto", artist: "Carla Morrison", src: "musique/Carla Morrison - Disfruto.mp3", cover: "image/Carla Morrison - Disfruto.jpeg", favorite: true },
+            { title: "24hrs in Shanghai", artist: "Connor Price & Kaien Nuen", src: "musique/Connor Price & Kaien Nuen - 24hrs in Shanghai.mp3", cover: "image/Connor Price & Kaien Nuen - 24hrs in Shanghai.jpeg", favorite: true },
+            { title: "sous influence", artist: "Eddy de Pretto", src: "musique/Eddy de Pretto - sous influence.mp3", cover: "image/Eddy de Pretto - sous influence.jpeg", favorite: true },
+            { title: "One More Night", artist: "Maroon 5", src: "musique/Maroon 5 - One More Night.mp3", cover: "image/Maroon 5 - One More Night.jpeg", favorite: true },
+            { title: "No", artist: "Meghan Trainor", src: "musique/Meghan Trainor - No.mp3", cover: "image/Meghan Trainor - No.jpeg", favorite: true },
+            { title: "dans l'univers", artist: "Nekfeu", src: "musique/Nekfeu - dans l'univers.mp3", cover: "image/Nekfeu - dans l'univers.jpeg", favorite: true },
+            { title: "Enfin Bon", artist: "TeddyBear", src: "musique/TeddyBear - Enfin Bon.mp3", cover: "image/TeddyBear - Enfin Bon.jpeg", favorite: true },
+            { title: "À L'AUBE", artist: "REVER", src: "musique/REVER - À L'AUBE.mp3", cover: "image/REVER - À L'AUBE.jpeg", favorite: true },
+            { title: "Poison", artist: "RIELL", src: "musique/RIELL - Poison.mp3", cover: "image/RIELL - Poison.jpeg", favorite: true },
+            { title: "Tu vuò fà l’americano", artist: "Renato Carosone", src: "musique/Tu vuò fà l’americano - Renato Carosone.mp3", cover: "image/Tu vuò fà l’americano - Renato Carosone.jpeg", favorite: true },
+            { title: "YOU", artist: "Alessandro Capozzi", src: "musique/YOU by Alessandro Capozzi.mp3", cover: "image/YOU by Alessandro Capozzi.jpeg", favorite: true },
+            { title: "Summertime Sadness", artist: "Lana Del Rey", src: "musique/Lana Del Rey - Summertime Sadness.mp3", cover: "image/Lana Del Rey - Summertime Sadness.jpeg", favorite: false },
+            { title: "Me, Myself & I", artist: "G-Eazy x Bebe Rexha", src: "musique/G-Eazy x Bebe Rexha - Me, Myself & I.mp3", cover: "image/G-Eazy x Bebe Rexha - Me, Myself & I.jpeg", favorite: false },
+            { title: "St-Félix", artist: "Arpin lépine", src: "musique/St-Félix.mp3", cover: "image/st-félix arpin lépine.jpeg", favorite: false },
+            { title: "Another Love", artist: "Tom Odell", src: "musique/Tom Odell - Another Love.mp3", cover: "image/Tom Odell - Another Love.jpeg", favorite: false },
+            { title: "Someone Like You", artist: "Adele", src: "musique/Adele – Someone Like You.mp3", cover: "image/Adele – Someone Like You.jpeg", favorite: false },
+            { title: "Someone You Loved", artist: "Lewis Capaldi", src: "musique/Lewis Capaldi - Someone You Loved.mp3", cover: "image/Lewis Capaldi - Someone You Loved.jpeg", favorite: false },
+            { title: "What Was I Made For", artist: "Billie Eilish", src: "musique/Billie Eilish - What Was I Made For.mp3", cover: "image/Billie Eilish - What Was I Made For.jpeg", favorite: false },
+            { title: "The Scientist", artist: "Coldplay", src: "musique/coldplay - The Scientist.mp3", cover: "image/The Scientist.jpeg", favorite: false },
+            { title: "My Immortal", artist: "Evanescence", src: "musique/My Immortal - Evanescence.mp3", cover: "image/My Immortal - Evanescence.jpeg", favorite: false },
+            { title: "Be My Lover", artist: "Melanie Thornton (remix)", src: "musique/Be My Lover (Club Mix).mp3", cover: "image/by my lover club mix.jpeg", favorite: false },
+            { title: "Olha a Explosão", artist: "MC Kevinho", src: "musique/MC Kevinho - Olha a Explosão (Audio HQ).mp3", cover: "image/MC Kevinho.jpeg", favorite: false },
+            { title: "Locked Away", artist: "R. City ft. Adam Levine", src: "musique/R. City - Locked Away ft. Adam Levine.mp3", cover: "image/R. City - Locked Away ft. Adam Levine.jpeg", favorite: false },
+            { title: "Fear", artist: "NF", src: "musique/NF - Fear.mp3", cover: "image/NF - Fear.jpeg", favorite: false },
+            { title: "Neon Teeth", artist: "Broken Loyalty", src: "musique/Neon Teeth & Broken Loyalty.mp3", cover: "image/Neon Teeth & Broken Loyalty.jpeg", favorite: false },
+            { title: "Monica Bellucci 2", artist: "IRIAS, LOVIXX", src: "musique/IRIAS, LOVIXX - Monica Bellucci 2.mp3", cover: "image/IRIAS, LOVIXX - Monica Bellucci 2.jpeg", favorite: false },
+            { title: "CHOPPER", artist: "GAWNE", src: "musique/GAWNE - CHOPPER.mp3", cover: "image/GAWNE - CHOPPER.jpeg", favorite: false },
+            { title: "PETETE", artist: "Gambi", src: "musique/Gambi - PETETE.mp3", cover: "image/Gambi - PETETE.jpeg", favorite: false },
+            { title: "My House", artist: "Flo Rida", src: "musique/Flo Rida - My House.mp3", cover: "image/Flo Rida - My House.jpeg", favorite: false },
+            { title: "The Monster", artist: "Eminem", src: "musique/Eminem - The Monster.mp3", cover: "image/Eminem - The Monster.jpeg", favorite: false },
+            { title: "Paranoid", artist: "Augxst", src: "musique/Augxst - Paranoid.mp3", cover: "image/Augxst - Paranoid.jpeg", favorite: false },
+            { title: "All Of The Lights", artist: "Kanye West", src: "musique/All Of The Lights.mp3", cover: "image/All Of The Lights.jpeg", favorite: false },
+            { title: "Locked Out Of Heaven", artist: "Bruno Mars", src: "musique/Bruno Mars - Locked Out Of Heaven.mp3", cover: "image/Bruno Mars - Locked Out Of Heaven.jpeg", favorite: false },
+            { title: "4K", artist: "El Alfa", src: "musique/4K.mp3", cover: "image/4K.jpeg", favorite: false },
+            { title: "Him & I", artist: "G-Eazy & Halsey", src: "musique/Him & I.mp3", cover: "image/Him & I.jpeg", favorite: false },
+            { title: "Maps", artist: "Maroon 5", src: "musique/Maps.mp3", cover: "image/maps maroon 5.jpeg", favorite: false },
+            { title: "AWGAZI", artist: "Palm Monkey", src: "musique/AWGAZI.mp3", cover: "image/AWGAZI.jpeg", favorite: false },
+            { title: "Closer", artist: "The Chainsmokers", src: "musique/Closer.mp3", cover: "image/Closer.jpeg", favorite: false },
+            { title: "Something Just Like This", artist: "The Chainsmokers & Coldplay", src: "musique/Something Just Like This.mp3", cover: "image/something just like this.jpeg", favorite: false },
+            { title: "Demons", artist: "Imagine Dragons", src: "musique/Imagine Dragons - Demons.mp3", cover: "image/Imagine Dragons - Demons.jpeg", favorite: false },
+            { title: "Nuevayol", artist: "Bad Bunny", src: "musique/NUEVAYoL.mp3", cover: "image/nuevayol bad bunny.jpeg", favorite: false },
+            { title: "Beautiful Things", artist: "Benson Boone", src: "musique/Beautiful Things.mp3", cover: "image/benson boone.jpeg", favorite: false },
+            { title: "GATA ONLY", artist: "FloyyMenor", src: "musique/GATA ONLY.mp3", cover: "image/GATA ONLY.jpeg", favorite: false },
+            { title: "Don't tell your dreams", artist: "LOVIXX, STOSLIV", src: "musique/dreams.mp3", cover: "image/dreams.jpeg", favorite: false },
+            { title: "Party Rock Anthem", artist: "LMFAO", src: "musique/party rock anthem.mp3", cover: "image/party rock anthem.jpeg", favorite: false },
+            { title: "MON BÉBÉ", artist: "RnBoi", src: "musique/RnBoi - MON BÉBÉ.mp3", cover: "image/RnBoi - MON BÉBÉ.jpeg", favorite: false },
+            { title: "Y que fue", artist: "Don Miguelo", src: "musique/Don Miguelo - Y Que Fue_.mp3", cover: "image/y que fue don miguelo.jpeg", favorite: false },
+            { title: "Highest in the room", artist: "Travis Scott", src: "musique/HIGHEST IN THE ROOM.mp3", cover: "image/Travis Scott.jpg", favorite: false },
+            { title: "Moves Like Jagger", artist: "Maroon 5", src: "musique/Moves Like Jagger.mp3", cover: "image/Maroon 5 image.jpg", favorite: false },
+            { title: "Riptide", artist: "Vance Joy", src: "musique/Riptide.mp3", cover: "image/riptide image.jpg", favorite: false },
+            { title: "Whistle", artist: "Flo Rida", src: "musique/whistle.mp3", cover: "image/Whistle.jpg", favorite: false }
         ];
 
         let customPlaylists = {
@@ -265,7 +279,7 @@
         const titleEl = document.getElementById('track-title');
         const artistEl = document.getElementById('track-artist');
         const coverEl = document.getElementById('track-cover');
-        
+
         const btnPlayPause = document.getElementById('btn-play-pause');
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
@@ -284,7 +298,6 @@
         let searchQuery = "";
         let playedShuffleIndices = [];
         let activePlaylistContext = null;
-        let currentDetailPlaylistName = null;
 
         let audioCtx, sourceNode, gainNode;
 
@@ -307,24 +320,50 @@
         function switchView(viewName) {
             document.getElementById('view-main').style.display = viewName === 'main' ? 'block' : 'none';
             document.getElementById('view-playlists').style.display = viewName === 'playlists' ? 'block' : 'none';
-            document.getElementById('view-playlist-detail').style.display = viewName === 'detail' ? 'block' : 'none';
 
             document.getElementById('btn-view-main').classList.toggle('active-mode', viewName === 'main');
-            document.getElementById('btn-view-playlists').classList.toggle('active-mode', viewName === 'playlists' || viewName === 'detail');
+            document.getElementById('btn-view-playlists').classList.toggle('active-mode', viewName === 'playlists');
 
             if (viewName === 'playlists') {
                 renderPlaylistsMenu();
             }
         }
 
+        function updateActivePlaylistBanner() {
+            const banner = document.getElementById('active-playlist-banner');
+            const label = document.getElementById('active-playlist-label');
+            if (activePlaylistContext && customPlaylists[activePlaylistContext]) {
+                label.textContent = `📁 Playlist : ${activePlaylistContext}`;
+                banner.style.display = 'flex';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        function clearActivePlaylist() {
+            activePlaylistContext = null;
+            playedShuffleIndices = [];
+            updateActivePlaylistBanner();
+            initPlaylist();
+        }
+
         function getActivePlaylist() {
             if (activePlaylistContext && customPlaylists[activePlaylistContext]) {
-                return customPlaylists[activePlaylistContext].map(index => ({ ...playlistData[index], originalIndex: index }));
+                return customPlaylists[activePlaylistContext]
+                    .map(index => ({ ...playlistData[index], originalIndex: index }))
+                    .filter(track => {
+                        if (!track) return false;
+                        const matchesFavorites = !onlyFavorites || track.favorite;
+                        const matchesSearch = searchQuery === "" ||
+                            track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            track.artist.toLowerCase().includes(searchQuery.toLowerCase());
+                        return matchesFavorites && matchesSearch;
+                    });
             }
             return playlistData.map((track, index) => ({ ...track, originalIndex: index })).filter(track => {
                 const matchesFavorites = !onlyFavorites || track.favorite;
-                const matchesSearch = searchQuery === "" || 
-                    track.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                const matchesSearch = searchQuery === "" ||
+                    track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     track.artist.toLowerCase().includes(searchQuery.toLowerCase());
                 return matchesFavorites && matchesSearch;
             });
@@ -337,12 +376,15 @@
         }
 
         function initPlaylist() {
+            updateActivePlaylistBanner();
             playlistElement.innerHTML = '';
             const activeList = getActivePlaylist();
 
             if (activeList.length === 0) {
                 const li = document.createElement('li');
-                li.textContent = "Aucune musique trouvée";
+                li.textContent = activePlaylistContext
+                    ? "Aucune musique dans cette playlist"
+                    : "Aucune musique trouvée";
                 li.style.textAlign = "center";
                 li.style.color = "#777";
                 playlistElement.appendChild(li);
@@ -351,13 +393,12 @@
 
             activeList.forEach((track) => {
                 const li = document.createElement('li');
-                
+
                 const textSpan = document.createElement('span');
                 textSpan.textContent = `${track.artist} - ${track.title}`;
                 textSpan.addEventListener('click', () => {
-                    activePlaylistContext = null;
                     currentGlobalIndex = track.originalIndex;
-                    playTrack(currentGlobalIndex, true); // Lance la lecture quand on clique sur une musique de la liste
+                    playTrack(currentGlobalIndex, true);
                 });
 
                 const favBtn = document.createElement('button');
@@ -374,7 +415,24 @@
                 li.appendChild(textSpan);
                 li.appendChild(favBtn);
 
-                if (track.originalIndex === currentGlobalIndex && activePlaylistContext === null) {
+                if (activePlaylistContext) {
+                    const removeBtn = document.createElement('button');
+                    removeBtn.innerHTML = "❌";
+                    removeBtn.className = "fav-btn";
+                    removeBtn.style.marginLeft = "10px";
+                    removeBtn.title = "Retirer de la playlist";
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        customPlaylists[activePlaylistContext] = customPlaylists[activePlaylistContext].filter(
+                            idx => idx !== track.originalIndex
+                        );
+                        saveDataToStorage();
+                        initPlaylist();
+                    });
+                    li.appendChild(removeBtn);
+                }
+
+                if (track.originalIndex === currentGlobalIndex) {
                     li.classList.add('active');
                 }
 
@@ -382,7 +440,6 @@
             });
         }
 
-        // Charger la première musique au démarrage sans lancer le son automatiquement
         function loadInitialTrack() {
             if (playlistData.length > 0) {
                 const track = playlistData[0];
@@ -411,7 +468,6 @@
                 btnPlayPause.textContent = "▶";
             }
             initPlaylist();
-            if (currentDetailPlaylistName) renderPlaylistDetail(currentDetailPlaylistName);
         }
 
         function formatTime(seconds) {
@@ -439,7 +495,7 @@
             const val = volumeBar.value;
             volumeLabel.textContent = val + "%";
             const volumeFloat = val / 100;
-            
+
             if (gainNode) {
                 gainNode.gain.value = volumeFloat;
             } else {
@@ -526,7 +582,6 @@
 
         btnFavoritesFilter.addEventListener('click', () => {
             onlyFavorites = !onlyFavorites;
-            activePlaylistContext = null;
             btnFavoritesFilter.classList.toggle('active-mode', onlyFavorites);
             initPlaylist();
         });
@@ -540,68 +595,16 @@
                 div.className = 'playlist-item-menu';
                 div.style.cssText = "padding: 12px; margin-bottom: 8px; background: #222; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;";
                 div.innerHTML = `<span>📁 ${plName}</span> <span style="color: #aaa; font-size: 0.8rem;">${customPlaylists[plName].length} titres</span>`;
-                div.onclick = () => openPlaylistDetail(plName);
+                div.onclick = () => selectPlaylistInMainView(plName);
                 container.appendChild(div);
             }
         }
 
-        function openPlaylistDetail(plName) {
-            currentDetailPlaylistName = plName;
-            document.getElementById('detail-playlist-title').textContent = plName;
-            switchView('detail');
-            renderPlaylistDetail(plName);
-        }
-
-        function backToPlaylistsMenu() {
-            currentDetailPlaylistName = null;
-            switchView('playlists');
-        }
-
-        function renderPlaylistDetail(plName) {
-            const container = document.getElementById('detail-playlist-tracks');
-            container.innerHTML = '';
-            const trackIndices = customPlaylists[plName];
-
-            if (trackIndices.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = "Aucune musique dans cette playlist";
-                li.style.textAlign = "center";
-                li.style.color = "#777";
-                container.appendChild(li);
-                return;
-            }
-
-            trackIndices.forEach((globalIdx) => {
-                const track = playlistData[globalIdx];
-                const li = document.createElement('li');
-                
-                const textSpan = document.createElement('span');
-                textSpan.textContent = `${track.artist} - ${track.title}`;
-                textSpan.addEventListener('click', () => {
-                    activePlaylistContext = plName;
-                    playTrack(globalIdx, true);
-                });
-
-                const removeBtn = document.createElement('button');
-                removeBtn.innerHTML = "❌";
-                removeBtn.className = "fav-btn";
-                removeBtn.title = "Retirer de la playlist";
-                removeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    customPlaylists[plName] = customPlaylists[plName].filter(idx => idx !== globalIdx);
-                    saveDataToStorage();
-                    renderPlaylistDetail(plName);
-                });
-
-                li.appendChild(textSpan);
-                li.appendChild(removeBtn);
-
-                if (globalIdx === currentGlobalIndex) {
-                    li.classList.add('active');
-                }
-
-                container.appendChild(li);
-            });
+        function selectPlaylistInMainView(plName) {
+            activePlaylistContext = plName;
+            playedShuffleIndices = [];
+            switchView('main');
+            initPlaylist();
         }
 
         function openAddToPlaylistModal() {
@@ -618,6 +621,9 @@
                         customPlaylists[plName].push(currentGlobalIndex);
                         saveDataToStorage();
                         alert(`Ajouté à la playlist "${plName}" avec succès !`);
+                        if (activePlaylistContext === plName) {
+                            initPlaylist();
+                        }
                     } else {
                         alert("Cette musique est déjà dans cette playlist.");
                     }
@@ -632,7 +638,6 @@
             document.getElementById('playlist-modal').style.display = 'none';
         }
 
-        // Lancement initial de la page
         loadInitialTrack();
     </script>
 </body>
